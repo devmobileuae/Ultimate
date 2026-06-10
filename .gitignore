@@ -1,0 +1,11 @@
+.DS_Store
+.build/
+.swiftpm/
+xcuserdata/
+DerivedData/
+
+# Design handoff reference (not part of the package)
+handoff/
+
+# Internal working docs
+docs/
