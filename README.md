@@ -1,9 +1,21 @@
 # Ultimate
 
+![Swift](https://img.shields.io/badge/Swift-5.10-F05138?logo=swift&logoColor=white)
+![iOS](https://img.shields.io/badge/iOS-17%2B-000000?logo=apple&logoColor=white)
+![SPM](https://img.shields.io/badge/SPM-compatible-brightgreen)
+![CI](https://github.com/devmobileuae/Ultimate/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
 A SwiftUI design system for iOS — a bold mobile design language built on an
 ink-black anchor, warm paper surfaces, candy accent fills, pill geometry
 everywhere, and thin-line icons. Light and dark themes out of the box,
 33 components, zero configuration.
+
+| | | |
+|:---:|:---:|:---:|
+| ![Gallery](.github/assets/gallery-root.png) | ![Buttons](.github/assets/buttons-light.png) | ![Buttons dark](.github/assets/buttons-dark.png) |
+| ![Cards](.github/assets/cards-light.png) | ![Cards dark](.github/assets/cards-dark.png) | ![Calendar](.github/assets/calendar-light.png) |
+| ![Controls](.github/assets/controls-light.png) | ![Badges](.github/assets/badges-light.png) | ![Bottom sheet](.github/assets/sheet-light.png) |
 
 - **iOS 17+**, SwiftUI, Swift Package Manager
 - Two products: **`Ultimate`** (tokens + components) and **`UltimateGallery`**
@@ -18,7 +30,7 @@ Or in `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/YOUR_GITHUB/Ultimate", from: "0.1.0"),
+    .package(url: "https://github.com/devmobileuae/Ultimate", from: "0.1.0"),
 ],
 targets: [
     .target(name: "MyApp", dependencies: [
