@@ -3,6 +3,24 @@
 All notable changes to Ultimate are documented here. Versions follow
 [Semantic Versioning](https://semver.org).
 
+## [0.2.0] — 2026-06-11
+
+### Added
+
+- **Configurable theming**: `UTheme` + `UltimateTheme.configure(_:)`. Install
+  a theme once at app start to rebrand the entire system — every semantic
+  color token (accents, selection fills, surfaces, text, status, nav, washes)
+  is overridable as a light/dark pair via `UThemeColor`. Anything not set
+  keeps the stock Ultimate value; existing 0.1 code is unaffected.
+- `UltimateTheme.reset()` restores the stock look.
+- Runtime theme switching: re-apply `configure(_:)` and rebuild the themed
+  hierarchy (e.g. `.id(themeToken)`); colors resolve the active theme at draw
+  time.
+- Gallery: new **Theming** page with live presets (Stock / Garnet / Ocean /
+  Forest).
+
+[0.2.0]: https://github.com/devmobileuae/Ultimate/releases/tag/0.2.0
+
 ## [0.1.0] — 2026-06-11
 
 Initial release.

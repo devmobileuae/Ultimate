@@ -69,6 +69,32 @@ WalletScreen()
     .environment(\.colorScheme, .dark)  // lime accents, white inverse pills
 ```
 
+## Theming
+
+Stock Ultimate needs zero setup. To rebrand, install a `UTheme` once at app
+start — every field is optional, anything you don't set keeps the built-in
+value. Each override is a light/dark pair:
+
+```swift
+@main
+struct MyApp: App {
+    init() {
+        UltimateTheme.configure(UTheme(
+            accentPrimary: .init(light: 0xC44569, dark: 0xE58BA3),
+            controlActive: .init(light: 0xC44569, dark: 0xE58BA3),
+            onControlActive: .init(light: 0xFFFFFF, dark: 0x121020)
+        ))
+    }
+    var body: some Scene { WindowGroup { ContentView() } }
+}
+```
+
+The theme can also be swapped at runtime (`UltimateTheme.configure` again, or
+`.reset()`); colors resolve the active theme at draw time, so attach
+`.id(yourThemeToken)` at the root of the themed hierarchy to make SwiftUI
+rebuild and pick the new palette up. The gallery's **Theming** page demos this
+with live presets.
+
 ## Gallery
 
 The full catalog — every token and component, every variant and state, with a

@@ -52,12 +52,12 @@ public struct GalleryView: View {
 
 /// One row in the gallery index; carries its destination page.
 enum GalleryDestination: Hashable {
-    case colors, typography, spacingRadius, shadows
+    case colors, typography, spacingRadius, shadows, theming
     case buttons, controls, inputs, cells, badgesAvatars
     case navigation, calendar, cardsProgress, sheetsToasts
 
     static let tokenPages: [GalleryDestination] = [
-        .colors, .typography, .spacingRadius, .shadows,
+        .colors, .typography, .spacingRadius, .shadows, .theming,
     ]
     static let componentPages: [GalleryDestination] = [
         .buttons, .controls, .inputs, .cells, .badgesAvatars,
@@ -70,6 +70,7 @@ enum GalleryDestination: Hashable {
         case .typography: "Typography"
         case .spacingRadius: "Spacing & Radius"
         case .shadows: "Shadows"
+        case .theming: "Theming"
         case .buttons: "Buttons"
         case .controls: "Controls"
         case .inputs: "Inputs"
@@ -88,6 +89,7 @@ enum GalleryDestination: Hashable {
         case .typography: "pencil"
         case .spacingRadius: "settings"
         case .shadows: "moon"
+        case .theming: "star"
         case .buttons: "zap"
         case .controls: "settings"
         case .inputs: "search"
@@ -106,6 +108,7 @@ enum GalleryDestination: Hashable {
         case .typography: .amber
         case .spacingRadius: .peri
         case .shadows: .lilac
+        case .theming: .sky
         case .buttons: .tangerine
         case .controls: .sky
         case .inputs: .mint
@@ -124,6 +127,7 @@ enum GalleryDestination: Hashable {
         case .typography: TypographyPage()
         case .spacingRadius: SpacingPage()
         case .shadows: ShadowsPage()
+        case .theming: ThemingPage()
         case .buttons: ButtonsPage()
         case .controls: ControlsPage()
         case .inputs: InputsPage()
