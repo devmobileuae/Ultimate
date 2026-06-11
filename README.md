@@ -109,10 +109,8 @@ ramp with Dynamic Type), `USpacing`, `URadius`, `USize`, `UShadow`, `UMotion`.
 - `UDropdown` custom triggers should be non-interactive views (the component
   wraps them in its own button).
 
-## Design credits
+## Credits
 
-- Design language and spec: the **Ultimate** design handoff (kept out of the
-  repo; the system implements it pixel-faithfully).
 - Typeface: [Onest](https://fonts.google.com/specimen/Onest), bundled under the
   [SIL Open Font License](Sources/Ultimate/Resources/Fonts/OFL.txt) — a
   stand-in for the brand face; swap point is `UFont`.
