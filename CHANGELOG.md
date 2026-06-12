@@ -3,6 +3,19 @@
 All notable changes to Ultimate are documented here. Versions follow
 [Semantic Versioning](https://semver.org).
 
+## [0.2.1] — 2026-06-12
+
+### Fixed
+
+- **Onest weights rendered as SF.** The bundled variable `Onest[wght].ttf`
+  exposes no PostScript names for its named instances on iOS, so
+  `Onest-Medium`/`Onest-SemiBold`/`Onest-Bold` silently fell back to the
+  system font — only Regular was real Onest. Static per-weight font files are
+  now bundled and registered alongside the variable file, restoring the full
+  type ramp (labels, headlines, titles, display).
+
+[0.2.1]: https://github.com/devmobileuae/Ultimate/releases/tag/0.2.1
+
 ## [0.2.0] — 2026-06-11
 
 ### Added

@@ -1,16 +1,24 @@
 import SwiftUI
 import CoreText
 
-/// One-time registration of the bundled Onest variable font.
+/// One-time registration of the bundled Onest fonts.
+///
+/// The variable `Onest[wght].ttf` provides Onest-Regular only: its named
+/// instances carry no PostScript names, so on iOS "Onest-Medium/SemiBold/Bold"
+/// don't resolve from it and SwiftUI silently falls back to SF. The static
+/// per-weight files cover those names.
 public enum UFontRegistration {
     nonisolated(unsafe) private static var registered = false
     public static func registerIfNeeded() {
         guard !registered else { return }
         registered = true
-        guard let url = Bundle.module.url(
-            forResource: "Onest[wght]", withExtension: "ttf", subdirectory: "Fonts"
-        ) else { assertionFailure("Onest font missing from bundle"); return }
-        CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+        let files = ["Onest[wght]", "Onest-Medium", "Onest-SemiBold", "Onest-Bold"]
+        for file in files {
+            guard let url = Bundle.module.url(
+                forResource: file, withExtension: "ttf", subdirectory: "Fonts"
+            ) else { assertionFailure("\(file).ttf missing from bundle"); continue }
+            CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+        }
     }
 }
 
