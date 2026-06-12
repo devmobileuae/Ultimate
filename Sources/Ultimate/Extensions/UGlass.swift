@@ -20,6 +20,15 @@ func glassBackground<S: InsettableShape>(_ shape: S) -> some View {
         }
 }
 
+/// Surface style for Ultimate's modal chrome (bottom sheet, dialog).
+public enum UModalStyle: Sendable {
+    /// Solid `surfaceCard` with the standard elevation shadow (default).
+    case card
+    /// Frosted glass — the content behind the scrim shimmers through.
+    /// No shadow: glass floats by contrast.
+    case glass
+}
+
 /// Frosted glass surface: ultra-thin material, a faint card tint, a hairline
 /// rim and a top highlight that reads as a machined edge catching light.
 /// Designed for content sitting on colorful or photographic backdrops.

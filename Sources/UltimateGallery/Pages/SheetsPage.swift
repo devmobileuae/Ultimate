@@ -3,7 +3,9 @@ import Ultimate
 
 struct SheetsPage: View {
     @State private var showSheet = false
+    @State private var showGlassSheet = false
     @State private var showDialog = false
+    @State private var showGlassDialog = false
     @State private var showToast = false
 
     var body: some View {
@@ -13,8 +15,14 @@ struct SheetsPage: View {
                     UButton("Bottom sheet", variant: .soft, block: true) {
                         showSheet = true
                     }
+                    UButton("Bottom sheet (glass)", variant: .soft, block: true) {
+                        showGlassSheet = true
+                    }
                     UButton("Dialog", variant: .soft, block: true) {
                         showDialog = true
+                    }
+                    UButton("Dialog (glass)", variant: .soft, block: true) {
+                        showGlassDialog = true
                     }
                     UButton("Toast", variant: .soft, block: true) {
                         showToast = true
@@ -41,12 +49,25 @@ struct SheetsPage: View {
             UButton("Done", variant: .primary, block: true) { showSheet = false }
                 .padding(.top, USpacing.s2)
         }
+        .uBottomSheet(isPresented: $showGlassSheet, title: "Glass sheet",
+                      subtitle: "The page shimmers through", style: .glass) {
+            USheetAction(icon: "share-2", label: "Share") { showGlassSheet = false }
+            USheetAction(icon: "download", label: "Download") { showGlassSheet = false }
+            UButton("Done", variant: .primary, block: true) { showGlassSheet = false }
+                .padding(.top, USpacing.s2)
+        }
         .uDialog(isPresented: $showDialog,
                  title: "Delete item?",
                  message: "This action cannot be undone.",
                  primaryLabel: "Delete",
                  primaryAction: {},
                  cancelLabel: "Cancel")
+        .uDialog(isPresented: $showGlassDialog,
+                 title: "Glass dialog",
+                 message: "Same dialog, frosted chrome.",
+                 primaryLabel: "OK",
+                 primaryAction: {},
+                 style: .glass)
         .uToast(isPresented: $showToast, icon: "check", message: "Saved")
     }
 }

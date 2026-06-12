@@ -3,6 +3,17 @@
 All notable changes to Ultimate are documented here. Versions follow
 [Semantic Versioning](https://semver.org).
 
+## [0.4.0] — 2026-06-12
+
+### Added
+
+- **Glass modal chrome**: `UModalStyle` (`.card` default / `.glass`) on
+  `.uBottomSheet` and `.uDialog`. Glass modals render frosted over the scrim —
+  the content behind shimmers through — and carry no shadow. Gallery: glass
+  sheet and glass dialog presenters on the Sheets page.
+
+[0.4.0]: https://github.com/devmobileuae/Ultimate/releases/tag/0.4.0
+
 ## [0.3.0] — 2026-06-12
 
 ### Added

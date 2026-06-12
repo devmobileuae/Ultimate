@@ -126,8 +126,9 @@ A frosted-glass surface — ultra-thin material, a faint tint, a hairline rim an
 a top highlight — for content over colorful or photographic backdrops. Apply it
 to any view with `.uGlass()` (default radius matches cards), or reach for the
 built-in glass variants: `UCard(fill: .glass)`, `UButton(variant: .glass)`,
-`UIconButton(variant: .glass)`. Glass floats by contrast, so it carries no
-shadow.
+`UIconButton(variant: .glass)`, and glass modal chrome via
+`.uBottomSheet(…, style: .glass)` / `.uDialog(…, style: .glass)`. Glass floats
+by contrast, so it carries no shadow.
 
 ## Gallery
 

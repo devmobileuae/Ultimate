@@ -13,7 +13,8 @@ public extension View {
         message: String? = nil,
         primaryLabel: String,
         primaryAction: @escaping () -> Void,
-        cancelLabel: String = "Cancel"
+        cancelLabel: String = "Cancel",
+        style: UModalStyle = .card
     ) -> some View {
         modifier(UDialogModifier(
             isPresented: isPresented,
@@ -21,7 +22,8 @@ public extension View {
             message: message,
             primaryLabel: primaryLabel,
             primaryAction: primaryAction,
-            cancelLabel: cancelLabel
+            cancelLabel: cancelLabel,
+            style: style
         ))
     }
 }
@@ -33,6 +35,7 @@ private struct UDialogModifier: ViewModifier {
     let primaryLabel: String
     let primaryAction: () -> Void
     let cancelLabel: String
+    let style: UModalStyle
 
     private func dismiss() {
         withAnimation(UMotion.easeOut(UMotion.base)) { isPresented = false }
@@ -84,11 +87,16 @@ private struct UDialogModifier: ViewModifier {
         .padding(.top, USpacing.s6)
         .padding(.horizontal, USpacing.s5)
         .padding(.bottom, USpacing.s5)
-        .background(
-            RoundedRectangle(cornerRadius: URadius.xl, style: .continuous)
-                .fill(UColor.surfaceCard)
-        )
-        .uShadow(.float)
+        .background {
+            let shape = RoundedRectangle(cornerRadius: URadius.xl, style: .continuous)
+            if style == .glass {
+                glassBackground(shape)
+            } else {
+                shape.fill(UColor.surfaceCard)
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: URadius.xl, style: .continuous))
+        .modifier(UModalShadow(enabled: style == .card, shadow: .float))
         .accessibilityAddTraits(.isModal)
     }
 }

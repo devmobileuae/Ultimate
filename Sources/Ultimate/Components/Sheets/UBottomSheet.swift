@@ -13,12 +13,14 @@ public extension View {
         isPresented: Binding<Bool>,
         title: String,
         subtitle: String? = nil,
+        style: UModalStyle = .card,
         @ViewBuilder content: @escaping () -> SheetContent
     ) -> some View {
         modifier(UBottomSheetModifier(
             isPresented: isPresented,
             title: title,
             subtitle: subtitle,
+            style: style,
             sheetContent: content
         ))
     }
@@ -28,6 +30,7 @@ private struct UBottomSheetModifier<SheetContent: View>: ViewModifier {
     @Binding var isPresented: Bool
     let title: String
     let subtitle: String?
+    let style: UModalStyle
     @ViewBuilder let sheetContent: () -> SheetContent
 
     private func dismiss() {
@@ -85,11 +88,25 @@ private struct UBottomSheetModifier<SheetContent: View>: ViewModifier {
         }
         .padding(USpacing.s5)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: URadius.xxl, style: .continuous)
-                .fill(UColor.surfaceCard)
-        )
-        .uShadow(.sheet)
+        .background {
+            let shape = RoundedRectangle(cornerRadius: URadius.xxl, style: .continuous)
+            if style == .glass {
+                glassBackground(shape)
+            } else {
+                shape.fill(UColor.surfaceCard)
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: URadius.xxl, style: .continuous))
+        .modifier(UModalShadow(enabled: style == .card, shadow: .sheet))
         .accessibilityAddTraits(.isModal)
+    }
+}
+
+/// Shadow only for solid modal chrome — glass floats by contrast.
+struct UModalShadow: ViewModifier {
+    let enabled: Bool
+    let shadow: UShadow
+    func body(content: Content) -> some View {
+        if enabled { content.uShadow(shadow) } else { content }
     }
 }
