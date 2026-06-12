@@ -33,6 +33,8 @@ private struct UBottomSheetModifier<SheetContent: View>: ViewModifier {
     let style: UModalStyle
     @ViewBuilder let sheetContent: () -> SheetContent
 
+    @State private var dragOffset: CGFloat = 0
+
     private func dismiss() {
         withAnimation(UMotion.easeOut(UMotion.slow)) { isPresented = false }
     }
@@ -51,14 +53,44 @@ private struct UBottomSheetModifier<SheetContent: View>: ViewModifier {
                     sheetCard
                         .padding(USpacing.s3)  // 12pt inset from all edges
                         .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .offset(y: dragOffset)
+                        .gesture(
+                            DragGesture(minimumDistance: 10)
+                                .onChanged { value in
+                                    let t = value.translation.height
+                                    dragOffset = t < 0 ? t * 0.2 : t
+                                }
+                                .onEnded { value in
+                                    let translation = value.translation.height
+                                    let predicted = value.predictedEndTranslation.height
+                                    if translation > 120 || predicted > 240 {
+                                        dismiss()
+                                    } else {
+                                        withAnimation(UMotion.spring()) {
+                                            dragOffset = 0
+                                        }
+                                    }
+                                }
+                        )
                 }
             }
             .animation(UMotion.easeOut(UMotion.slow), value: isPresented)
+            .onChange(of: isPresented) { _, newValue in
+                if newValue { dragOffset = 0 }
+            }
         }
     }
 
     private var sheetCard: some View {
         VStack(alignment: .leading, spacing: 0) {
+            // Drag indicator / grabber
+            Capsule()
+                .fill(UColor.borderHairline)
+                .frame(width: 36, height: 5)
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, 8)
+                .accessibilityHidden(true)
+
             HStack(alignment: .top, spacing: USpacing.s3) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)

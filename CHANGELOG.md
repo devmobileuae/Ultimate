@@ -3,6 +3,17 @@
 All notable changes to Ultimate are documented here. Versions follow
 [Semantic Versioning](https://semver.org).
 
+## [0.7.0] — 2026-06-12
+
+### Added
+
+- **Swipe-to-dismiss bottom sheet**: `.uBottomSheet` now has a drag grabber and
+  follows a downward drag, dismissing past a threshold (or a flick) and springing
+  back otherwise. Internal behavior only — no API change. Applies to `.card`
+  and `.glass` styles.
+
+[0.7.0]: https://github.com/devmobileuae/Ultimate/releases/tag/0.7.0
+
 ## [0.6.0] — 2026-06-12
 
 ### Added
