@@ -35,6 +35,16 @@ struct NavigationPage: View {
                 UBottomNav(selection: $navSelection, items: navItems)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, USpacing.s2)
+                Specimen(label: "glass (over content)") {
+                    UBottomNav(selection: $navSelection, items: navItems, style: .glass)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, USpacing.s4)
+                        .background(
+                            LinearGradient(colors: [UColor.periTint, UColor.lilac],
+                                           startPoint: .topLeading, endPoint: .bottomTrailing),
+                            in: .rect(cornerRadius: URadius.xl)
+                        )
+                }
             }
 
             SpecimenSection(title: "Top bar") {

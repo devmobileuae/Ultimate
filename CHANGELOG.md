@@ -3,6 +3,17 @@
 All notable changes to Ultimate are documented here. Versions follow
 [Semantic Versioning](https://semver.org).
 
+## [0.5.0] — 2026-06-12
+
+### Added
+
+- **Glass bottom nav**: `UBottomNav(selection:items:style:)` with `.ink`
+  (default, unchanged) and `.glass` — a frosted pill the scrolling content
+  shimmers through; active item becomes a `surfaceInverse` circle, no shadow.
+  Gallery: glass nav specimen on the Navigation page.
+
+[0.5.0]: https://github.com/devmobileuae/Ultimate/releases/tag/0.5.0
+
 ## [0.4.0] — 2026-06-12
 
 ### Added
