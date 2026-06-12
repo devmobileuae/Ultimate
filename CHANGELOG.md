@@ -3,6 +3,17 @@
 All notable changes to Ultimate are documented here. Versions follow
 [Semantic Versioning](https://semver.org).
 
+## [0.8.0] — 2026-06-12
+
+### Changed
+
+- **Whole bottom sheet is now draggable to dismiss** (not just the grabber). The
+  drag is attached with `simultaneousGesture` and a 20pt minimum + vertical-
+  dominance guard, so taps on buttons/checkboxes still fire instantly and a
+  horizontal slider drag doesn't move the sheet.
+
+[0.8.0]: https://github.com/devmobileuae/Ultimate/releases/tag/0.8.0
+
 ## [0.7.1] — 2026-06-12
 
 ### Fixed

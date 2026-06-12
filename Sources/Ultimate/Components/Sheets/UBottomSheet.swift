@@ -54,6 +54,11 @@ private struct UBottomSheetModifier<SheetContent: View>: ViewModifier {
                         .padding(USpacing.s3)  // 12pt inset from all edges
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                         .offset(y: dragOffset)
+                        // Whole-card drag-to-dismiss. `simultaneousGesture` lets the
+                        // buttons/sliders/chips inside keep recognizing taps — a tap
+                        // (no movement) never trips the 20pt minimum, so it goes to
+                        // the control; only a real vertical drag moves the sheet.
+                        .simultaneousGesture(dragGesture)
                 }
             }
             .animation(UMotion.easeOut(UMotion.slow), value: isPresented)
@@ -63,12 +68,15 @@ private struct UBottomSheetModifier<SheetContent: View>: ViewModifier {
         }
     }
 
-    /// Drag-to-dismiss lives ONLY on the grabber handle (not the whole card), so
-    /// buttons, sliders and chips in the sheet body never compete with it for taps.
+    /// Whole-card drag-to-dismiss, attached via `simultaneousGesture` so it never
+    /// blocks taps on the body's controls. The 20pt minimum keeps taps clean, and
+    /// the vertical-dominance guard means a horizontal control drag (e.g. a slider)
+    /// doesn't drag the sheet.
     private var dragGesture: some Gesture {
-        DragGesture(minimumDistance: 8)
+        DragGesture(minimumDistance: 20)
             .onChanged { value in
                 let t = value.translation.height
+                guard t > 0 || abs(t) > abs(value.translation.width) else { return }
                 dragOffset = t < 0 ? t * 0.2 : t
             }
             .onEnded { value in
@@ -82,16 +90,13 @@ private struct UBottomSheetModifier<SheetContent: View>: ViewModifier {
 
     private var sheetCard: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Drag handle — a generous top strip carrying the grabber and the
-            // swipe-to-dismiss gesture (kept off the body so taps never conflict).
+            // Grabber — purely visual; the whole card is the drag surface.
             Capsule()
                 .fill(UColor.borderHairline)
                 .frame(width: 36, height: 5)
                 .frame(maxWidth: .infinity)
                 .padding(.top, 2)
                 .padding(.bottom, 12)
-                .contentShape(Rectangle())
-                .gesture(dragGesture)
                 .accessibilityHidden(true)
 
             HStack(alignment: .top, spacing: USpacing.s3) {
