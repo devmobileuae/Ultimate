@@ -48,6 +48,15 @@ struct NavigationPage: View {
             }
 
             SpecimenSection(title: "Top bar") {
+                Specimen(label: "glass + fade (pinned over content)") {
+                    ZStack(alignment: .top) {
+                        LinearGradient(colors: [UColor.tangerine, UColor.pinkTint],
+                                       startPoint: .top, endPoint: .bottom)
+                            .frame(height: 170)
+                        UTopBar(title: "Glass bar", style: .glass, backAction: {})
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: URadius.xl, style: .continuous))
+                }
                 VStack(spacing: USpacing.s4) {
                     UTopBar(title: "Back convenience", backAction: {})
                     UTopBar(

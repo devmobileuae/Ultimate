@@ -3,6 +3,19 @@
 All notable changes to Ultimate are documented here. Versions follow
 [Semantic Versioning](https://semver.org).
 
+## [0.6.0] — 2026-06-12
+
+### Added
+
+- **Glass top bar + edge fade**: `UTopBar(…, style: .glass)` backs the bar
+  with a faded frosted strip reaching up through the status bar — pin it and
+  scrolling content dissolves under it. The underlying treatment is exposed as
+  `.uEdgeFade(_:height:)` / `UGlassEdgeFade` for shells that want the fade on
+  a bare screen edge (top or bottom) without a bar. Gallery: glass-bar
+  specimen on the Navigation page.
+
+[0.6.0]: https://github.com/devmobileuae/Ultimate/releases/tag/0.6.0
+
 ## [0.5.0] — 2026-06-12
 
 ### Added
