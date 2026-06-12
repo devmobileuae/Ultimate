@@ -54,24 +54,6 @@ private struct UBottomSheetModifier<SheetContent: View>: ViewModifier {
                         .padding(USpacing.s3)  // 12pt inset from all edges
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                         .offset(y: dragOffset)
-                        .gesture(
-                            DragGesture(minimumDistance: 10)
-                                .onChanged { value in
-                                    let t = value.translation.height
-                                    dragOffset = t < 0 ? t * 0.2 : t
-                                }
-                                .onEnded { value in
-                                    let translation = value.translation.height
-                                    let predicted = value.predictedEndTranslation.height
-                                    if translation > 120 || predicted > 240 {
-                                        dismiss()
-                                    } else {
-                                        withAnimation(UMotion.spring()) {
-                                            dragOffset = 0
-                                        }
-                                    }
-                                }
-                        )
                 }
             }
             .animation(UMotion.easeOut(UMotion.slow), value: isPresented)
@@ -81,14 +63,35 @@ private struct UBottomSheetModifier<SheetContent: View>: ViewModifier {
         }
     }
 
+    /// Drag-to-dismiss lives ONLY on the grabber handle (not the whole card), so
+    /// buttons, sliders and chips in the sheet body never compete with it for taps.
+    private var dragGesture: some Gesture {
+        DragGesture(minimumDistance: 8)
+            .onChanged { value in
+                let t = value.translation.height
+                dragOffset = t < 0 ? t * 0.2 : t
+            }
+            .onEnded { value in
+                if value.translation.height > 120 || value.predictedEndTranslation.height > 240 {
+                    dismiss()
+                } else {
+                    withAnimation(UMotion.spring()) { dragOffset = 0 }
+                }
+            }
+    }
+
     private var sheetCard: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Drag indicator / grabber
+            // Drag handle — a generous top strip carrying the grabber and the
+            // swipe-to-dismiss gesture (kept off the body so taps never conflict).
             Capsule()
                 .fill(UColor.borderHairline)
                 .frame(width: 36, height: 5)
                 .frame(maxWidth: .infinity)
-                .padding(.bottom, 8)
+                .padding(.top, 2)
+                .padding(.bottom, 12)
+                .contentShape(Rectangle())
+                .gesture(dragGesture)
                 .accessibilityHidden(true)
 
             HStack(alignment: .top, spacing: USpacing.s3) {

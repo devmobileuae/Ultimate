@@ -3,6 +3,18 @@
 All notable changes to Ultimate are documented here. Versions follow
 [Semantic Versioning](https://semver.org).
 
+## [0.7.1] — 2026-06-12
+
+### Fixed
+
+- **Sheet body controls were intermittently un-tappable / laggy.** The 0.7.0
+  swipe-to-dismiss `DragGesture` covered the whole sheet card, so buttons,
+  sliders and chips inside had to lose a gesture-disambiguation race on every
+  tap. The drag now lives only on the grabber handle at the top — body controls
+  respond instantly again.
+
+[0.7.1]: https://github.com/devmobileuae/Ultimate/releases/tag/0.7.1
+
 ## [0.7.0] — 2026-06-12
 
 ### Added
