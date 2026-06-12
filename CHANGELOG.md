@@ -3,6 +3,17 @@
 All notable changes to Ultimate are documented here. Versions follow
 [Semantic Versioning](https://semver.org).
 
+## [0.8.1] — 2026-06-12
+
+### Fixed
+
+- **Sheet drag no longer hijacks horizontal control drags.** The drag direction
+  is now decided ONCE on the first movement of each touch: vertical-dominant →
+  sheet drag; otherwise the sheet is locked out for that whole touch. So dragging
+  a slider left/right and then down no longer drags the sheet.
+
+[0.8.1]: https://github.com/devmobileuae/Ultimate/releases/tag/0.8.1
+
 ## [0.8.0] — 2026-06-12
 
 ### Changed

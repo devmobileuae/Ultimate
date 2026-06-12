@@ -34,6 +34,9 @@ private struct UBottomSheetModifier<SheetContent: View>: ViewModifier {
     @ViewBuilder let sheetContent: () -> SheetContent
 
     @State private var dragOffset: CGFloat = 0
+    /// Per-gesture decision: nil = undecided, true = this touch is a sheet-drag,
+    /// false = locked out (the first movement went sideways → a control owns it).
+    @State private var dragIsSheet: Bool? = nil
 
     private func dismiss() {
         withAnimation(UMotion.easeOut(UMotion.slow)) { isPresented = false }
@@ -63,23 +66,31 @@ private struct UBottomSheetModifier<SheetContent: View>: ViewModifier {
             }
             .animation(UMotion.easeOut(UMotion.slow), value: isPresented)
             .onChange(of: isPresented) { _, newValue in
-                if newValue { dragOffset = 0 }
+                if newValue { dragOffset = 0; dragIsSheet = nil }
             }
         }
     }
 
     /// Whole-card drag-to-dismiss, attached via `simultaneousGesture` so it never
-    /// blocks taps on the body's controls. The 20pt minimum keeps taps clean, and
-    /// the vertical-dominance guard means a horizontal control drag (e.g. a slider)
-    /// doesn't drag the sheet.
+    /// blocks taps on the body's controls. The direction is decided ONCE, on the
+    /// first movement of each touch: if that first movement is vertical-dominant
+    /// it's a sheet-drag; otherwise (a horizontal control drag like a slider) the
+    /// sheet is locked out for the rest of that touch — even if the finger later
+    /// moves down. So a control interaction never turns into a sheet swipe.
     private var dragGesture: some Gesture {
-        DragGesture(minimumDistance: 20)
+        DragGesture(minimumDistance: 12)
             .onChanged { value in
+                if dragIsSheet == nil {
+                    dragIsSheet = abs(value.translation.height) > abs(value.translation.width)
+                }
+                guard dragIsSheet == true else { return }
                 let t = value.translation.height
-                guard t > 0 || abs(t) > abs(value.translation.width) else { return }
                 dragOffset = t < 0 ? t * 0.2 : t
             }
             .onEnded { value in
+                let wasSheetDrag = dragIsSheet == true
+                dragIsSheet = nil
+                guard wasSheetDrag else { return }
                 if value.translation.height > 120 || value.predictedEndTranslation.height > 240 {
                     dismiss()
                 } else {
