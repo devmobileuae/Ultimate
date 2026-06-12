@@ -9,6 +9,7 @@ public struct UStepper: View {
     let range: ClosedRange<Int>
     let axis: Axis
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.uHaptic) private var hapticOverride
 
     public init(value: Binding<Int>, in range: ClosedRange<Int> = 0...99,
                 axis: Axis = .horizontal) {
@@ -24,7 +25,8 @@ public struct UStepper: View {
 
     private func step(_ delta: Int) {
         let next = value + delta
-        guard range.contains(next) else { return }
+        guard range.contains(next) else { return }   // clamped no-op stays silent
+        fireSemanticHaptic(.selection, override: hapticOverride)
         withAnimation(UMotion.easeOut(UMotion.fast)) { value = next }
     }
 
@@ -35,6 +37,9 @@ public struct UStepper: View {
                 .frame(width: buttonSize.width, height: buttonSize.height)
                 .contentShape(.capsule)
         }
+        // Suppress the generic press haptic; `step()` fires `.selection` on an
+        // actual change so a clamped tap makes no feedback (no double-fire).
+        .uHaptic(.none)
         .buttonStyle(.uPressable)
         .disabled(!range.contains(value + delta))
         .opacity(range.contains(value + delta) ? 1 : 0.35)

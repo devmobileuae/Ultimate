@@ -53,6 +53,7 @@ public struct UDropdown<Trigger: View>: View {
 
     @State private var isOpen = false
     @State private var triggerHeight: CGFloat = 0
+    @Environment(\.uHaptic) private var hapticOverride
 
     public init(
         selection: Binding<Int>,
@@ -126,6 +127,9 @@ public struct UDropdown<Trigger: View>: View {
         let isSelected = option.id == selection
         let tint = option.destructive ? UColor.danger : UColor.textPrimary
         return Button {
+            // Semantic haptic on selection; destructive rows warn.
+            fireSemanticHaptic(option.destructive ? .warning : .selection,
+                               override: hapticOverride)
             selection = option.id
             withAnimation(UMotion.easeOut(UMotion.fast)) { isOpen = false }
         } label: {

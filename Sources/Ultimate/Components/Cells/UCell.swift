@@ -115,12 +115,17 @@ public struct UCell<Leading: View, Trailing: View>: View {
     }
 }
 
-/// Press feedback for tappable cells: rectangular `pressWash` overlay, no scale.
+/// Press feedback for tappable cells: rectangular `pressWash` overlay, no scale,
+/// plus a press-down haptic (the effective ``UHaptic``).
 private struct UCellButtonStyle: ButtonStyle {
+    @Environment(\.uHaptic) private var hapticOverride
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .background(configuration.isPressed ? UColor.pressWash : Color.clear)
             .animation(UMotion.easeOut(UMotion.fast), value: configuration.isPressed)
+            .onChange(of: configuration.isPressed) { _, pressed in
+                if pressed { fireHaptic(hapticOverride) }
+            }
     }
 }
 

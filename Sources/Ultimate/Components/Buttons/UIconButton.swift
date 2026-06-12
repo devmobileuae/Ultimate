@@ -7,6 +7,7 @@ public enum UIconButtonVariant: CaseIterable, Sendable {
     case dark      // inverse circle — the signature arrow-up-right/check circle
     case outline   // hairline ring
     case ghost
+    case glass     // frosted glass circle (for colored/photographic backdrops)
 }
 
 public struct UIconButton: View {
@@ -44,24 +45,28 @@ public struct UIconButton: View {
         case .soft: UColor.surfaceFill
         case .white: UColor.surfaceCard
         case .dark: UColor.surfaceInverse
-        case .outline, .ghost: .clear
+        case .outline, .ghost, .glass: .clear
         }
     }
     private var foreground: Color {
         variant == .dark ? UColor.textOnInverse : UColor.textPrimary
     }
 
+    @ViewBuilder private var backgroundShape: some View {
+        if variant == .glass {
+            glassBackground(Circle()).clipShape(Circle())
+        } else if variant == .white {
+            Circle().fill(background).uShadow(.card)
+        } else {
+            Circle().fill(background)
+        }
+    }
+
     public var body: some View {
         Button(action: action) {
             UIcon(icon, size: iconSize)
                 .frame(width: size.height, height: size.height)
-                .background {
-                    if variant == .white {
-                        Circle().fill(background).uShadow(.card)
-                    } else {
-                        Circle().fill(background)
-                    }
-                }
+                .background { backgroundShape }
                 .overlay {
                     if variant == .outline {
                         Circle().strokeBorder(UColor.borderHairline, lineWidth: USize.borderHairline)

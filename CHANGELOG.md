@@ -3,6 +3,35 @@
 All notable changes to Ultimate are documented here. Versions follow
 [Semantic Versioning](https://semver.org).
 
+## [0.3.0] — 2026-06-12
+
+### Added
+
+- **Haptics layer** — every tappable component gives feedback out of the box,
+  ON by default. A light press haptic fires on touch-down (`UButton`,
+  `UIconButton`, `UChip`, `UNavCircle`, `USheetAction`, `UCell`, dropdown
+  trigger, and all pressables); state-changing controls fire a `.selection`
+  tick (`USwitch`, `UCheckbox`, `URadio`, `USegmentedControl`, `UStepper`,
+  `UTabs`, `UDateStrip`, `UBottomNav`, `UCalendarDay`, dropdown row), and
+  destructive actions fire a `.warning` (destructive dropdown row, destructive
+  `USheetAction`). Clamped/no-op taps stay silent.
+  - `UHaptic` enum (impact / selection / notification styles, plus `.none`).
+  - `UltimateHaptics.configure(default:)` to set or disable the global press
+    feel app-wide.
+  - `.uHaptic(_:)` view modifier to override haptics per subtree.
+  - Generators respect the user's system-level haptics setting; no-op on
+    devices without a Taptic Engine.
+- **Glass effect** — a frosted surface (ultra-thin material + faint tint +
+  hairline rim + top highlight) for content over colorful or photographic
+  backdrops, with no shadow (it floats by contrast).
+  - `.uGlass(radius:)` view modifier (default radius matches cards).
+  - `UCardFill.glass`, `UButtonVariant.glass`, and a `.glass` `UIconButton`
+    variant.
+  - Gallery: glass specimens on the Buttons and Cards pages (over a gradient
+    backdrop) and a Haptics specimen on the Controls page.
+
+[0.3.0]: https://github.com/devmobileuae/Ultimate/releases/tag/0.3.0
+
 ## [0.2.1] — 2026-06-12
 
 ### Fixed

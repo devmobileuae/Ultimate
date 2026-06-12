@@ -16,13 +16,18 @@ public enum UMotion {
     }
 }
 
-/// Standard press feedback: scale to 0.97 @ 140ms ease-out.
+/// Standard press feedback: scale to 0.97 @ 140ms ease-out, plus a press-down
+/// haptic (the effective ``UHaptic``; `.light` by default).
 public struct UPressableStyle: ButtonStyle {
+    @Environment(\.uHaptic) private var hapticOverride
     public init() {}
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.97 : 1)
             .animation(UMotion.easeOut(UMotion.fast), value: configuration.isPressed)
+            .onChange(of: configuration.isPressed) { _, pressed in
+                if pressed { fireHaptic(hapticOverride) }
+            }
     }
 }
 

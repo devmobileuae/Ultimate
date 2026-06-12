@@ -14,6 +14,7 @@ public struct UDateStrip: View {
     private let dates: [Date]
     private let style: Style
     private let calendar = Calendar.current
+    @Environment(\.uHaptic) private var hapticOverride
 
     public init(selection: Binding<Date>, dates: [Date], style: Style = .outlined) {
         self._selection = selection
@@ -42,6 +43,7 @@ public struct UDateStrip: View {
         let isSelected = calendar.isDate(date, inSameDayAs: selection)
         let day = calendar.component(.day, from: date)
         Button {
+            if !isSelected { fireSemanticHaptic(.selection, override: hapticOverride) }
             selection = date
         } label: {
             VStack(spacing: USpacing.s1) {
@@ -63,6 +65,9 @@ public struct UDateStrip: View {
             }
             .contentShape(.capsule)
         }
+        // Suppress press haptic; the button fires `.selection` on an actual
+        // day change instead (no double-fire).
+        .uHaptic(.none)
         .buttonStyle(.uPressable)
         .accessibilityLabel(date.formatted(.dateTime.weekday(.wide).day().month(.wide)))
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)

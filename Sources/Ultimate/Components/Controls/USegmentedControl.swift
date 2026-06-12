@@ -7,6 +7,7 @@ public struct USegmentedControl: View {
     let items: [String]
     @Namespace private var pill
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.uHaptic) private var hapticOverride
 
     public init(selection: Binding<Int>, items: [String]) {
         self._selection = selection
@@ -18,6 +19,9 @@ public struct USegmentedControl: View {
             ForEach(Array(items.enumerated()), id: \.offset) { index, title in
                 let isSelected = index == selection
                 Button {
+                    if selection != index {
+                        fireSemanticHaptic(.selection, override: hapticOverride)
+                    }
                     withAnimation(UMotion.easeOut()) { selection = index }
                 } label: {
                     Text(title)

@@ -53,6 +53,29 @@ struct ButtonsPage: View {
                     }
                 }
             }
+
+            SpecimenSection(title: "glass") {
+                VStack(alignment: .leading, spacing: USpacing.s4) {
+                    HStack(spacing: USpacing.s3) {
+                        UButton("Small", variant: .glass, size: .sm) {}
+                        UButton("Medium", variant: .glass, size: .md) {}
+                        UButton("Large", variant: .glass, size: .lg) {}
+                    }
+                    HStack(spacing: USpacing.s3) {
+                        UButton("Disabled", variant: .glass) {}.disabled(true)
+                        UIconButton("bell", variant: .glass, size: .lg,
+                                    accessibilityLabel: "Notifications") {}
+                    }
+                    UButton("Block", variant: .glass, block: true) {}
+                }
+                .padding(USpacing.s5)
+                .frame(maxWidth: .infinity)
+                .background(
+                    LinearGradient(colors: [UColor.peri, UColor.lilac],
+                                   startPoint: .topLeading, endPoint: .bottomTrailing),
+                    in: .rect(cornerRadius: URadius.xl)
+                )
+            }
         }
     }
 }

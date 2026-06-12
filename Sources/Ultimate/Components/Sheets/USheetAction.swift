@@ -14,6 +14,7 @@ public struct USheetAction: View {
     private let style: Style
     private let destructive: Bool
     private let action: () -> Void
+    @Environment(\.uHaptic) private var hapticOverride
 
     public init(
         icon: String,
@@ -45,7 +46,11 @@ public struct USheetAction: View {
     private var horizontalPadding: CGFloat { style == .plain ? USpacing.s1 : USpacing.s4 }
 
     public var body: some View {
-        Button(action: action) {
+        Button {
+            // Destructive rows warn instead of the generic press haptic.
+            if destructive { fireSemanticHaptic(.warning, override: hapticOverride) }
+            action()
+        } label: {
             HStack(spacing: USpacing.s3) {
                 UIcon(icon, size: 22)
                 Text(label)
@@ -61,6 +66,19 @@ public struct USheetAction: View {
             )
             .contentShape(RoundedRectangle(cornerRadius: URadius.lg, style: .continuous))
         }
+        // Destructive rows fire `.warning` in the action; suppress the generic
+        // press haptic there to avoid a double-fire. Non-destructive rows keep
+        // the inherited press haptic.
+        .modifier(SuppressPressHapticIf(suppressed: destructive))
         .buttonStyle(.uPressable)
+    }
+}
+
+/// Sets `.uHaptic(.none)` only when `suppressed`, otherwise leaves the inherited
+/// press haptic untouched.
+private struct SuppressPressHapticIf: ViewModifier {
+    let suppressed: Bool
+    func body(content: Content) -> some View {
+        if suppressed { content.uHaptic(.none) } else { content }
     }
 }

@@ -5,11 +5,13 @@ import SwiftUI
 public struct USwitch: View {
     @Binding var isOn: Bool
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.uHaptic) private var hapticOverride
 
     public init(isOn: Binding<Bool>) { self._isOn = isOn }
 
     public var body: some View {
         Button {
+            fireSemanticHaptic(.selection, override: hapticOverride)
             withAnimation(UMotion.spring()) { isOn.toggle() }
         } label: {
             Capsule()

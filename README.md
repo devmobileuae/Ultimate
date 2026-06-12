@@ -95,6 +95,40 @@ The theme can also be swapped at runtime (`UltimateTheme.configure` again, or
 rebuild and pick the new palette up. The gallery's **Theming** page demos this
 with live presets.
 
+## Haptics
+
+Every tappable Ultimate component gives haptic feedback out of the box — a
+light press on touch-down, and a `.selection` tick on the controls that change
+state (switch, checkbox, radio, segmented, stepper, tabs, date strip, bottom
+nav, calendar day, dropdown row); destructive rows fire a `.warning`. No setup
+required.
+
+Tune it globally, or scope it per subtree:
+
+```swift
+// App-wide: disable, or pick a different press feel.
+UltimateHaptics.configure(default: .none)     // off everywhere
+UltimateHaptics.configure(default: .medium)   // heavier press
+
+// Per subtree — overrides the global default for everything inside.
+MyForm()
+    .uHaptic(.none)        // silence this screen
+SignatureCTA()
+    .uHaptic(.heavy)       // emphasize one moment
+```
+
+Generators honor the user's system-level haptics setting, and haptics are a
+no-op on devices without a Taptic Engine.
+
+## Glass
+
+A frosted-glass surface — ultra-thin material, a faint tint, a hairline rim and
+a top highlight — for content over colorful or photographic backdrops. Apply it
+to any view with `.uGlass()` (default radius matches cards), or reach for the
+built-in glass variants: `UCard(fill: .glass)`, `UButton(variant: .glass)`,
+`UIconButton(variant: .glass)`. Glass floats by contrast, so it carries no
+shadow.
+
 ## Gallery
 
 The full catalog — every token and component, every variant and state, with a
@@ -113,7 +147,7 @@ struct ContentView: View {
 | Group | Components |
 |---|---|
 | Core | `UIcon` |
-| Buttons | `UButton` (6 variants × 3 sizes), `UIconButton` |
+| Buttons | `UButton` (7 variants × 3 sizes, incl. `.glass`), `UIconButton` (incl. `.glass`) |
 | Controls | `USwitch`, `UCheckbox`, `URadio`, `USegmentedControl`, `UStepper`, `USlider` |
 | Inputs | `UInput`, `USearchBar` |
 | Cells | `UCell`, `UCellGroup`, `UAgendaRow` |

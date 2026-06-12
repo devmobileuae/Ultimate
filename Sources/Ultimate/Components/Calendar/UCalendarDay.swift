@@ -41,6 +41,7 @@ public struct UCalendarDay: View {
     private let muted: Bool
     private let info: UCalendarDayInfo?
     private let action: (() -> Void)?
+    @Environment(\.uHaptic) private var hapticOverride
 
     public init(
         day: Int,
@@ -131,7 +132,13 @@ public struct UCalendarDay: View {
 
     public var body: some View {
         if let action, !disabled {
-            Button(action: action) { content }
+            Button {
+                if !selected { fireSemanticHaptic(.selection, override: hapticOverride) }
+                action()
+            } label: { content }
+                // Suppress press haptic; fires `.selection` on an actual day
+                // change instead (no double-fire).
+                .uHaptic(.none)
                 .buttonStyle(.uPressable)
                 .accessibilityLabel("\(day)")
                 .accessibilityAddTraits(selected ? [.isButton, .isSelected] : .isButton)

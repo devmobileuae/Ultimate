@@ -69,6 +69,20 @@ struct ControlsPage: View {
                     Specimen(label: "fixed 1") { USlider(value: .constant(1)) }
                 }
             }
+
+            SpecimenSection(title: "Haptics") {
+                VStack(alignment: .leading, spacing: USpacing.s3) {
+                    HStack(spacing: USpacing.s3) {
+                        UButton("Light", variant: .soft) {}.uHaptic(.light)
+                        UButton("Heavy", variant: .soft) {}.uHaptic(.heavy)
+                        UButton("None", variant: .soft) {}.uHaptic(.none)
+                    }
+                    Text("Haptics are ON by default. Feel these on a real device — "
+                         + "the simulator has no haptic engine.")
+                        .uText(.caption)
+                        .foregroundStyle(UColor.textSecondary)
+                }
+            }
         }
     }
 }

@@ -22,6 +22,7 @@ public struct UBottomNav: View {
     @Binding private var selection: Int
     private let items: [Item]
     @Namespace private var pill
+    @Environment(\.uHaptic) private var hapticOverride
 
     public init(selection: Binding<Int>, items: [Item]) {
         self._selection = selection
@@ -33,6 +34,9 @@ public struct UBottomNav: View {
             ForEach(Array(items.enumerated()), id: \.offset) { index, item in
                 let isSelected = index == selection
                 Button {
+                    if selection != index {
+                        fireSemanticHaptic(.selection, override: hapticOverride)
+                    }
                     selection = index
                 } label: {
                     UIcon(item.icon, size: 24)
@@ -48,6 +52,9 @@ public struct UBottomNav: View {
                             }
                         }
                 }
+                // Suppress press haptic; the button fires `.selection` on an
+                // actual tab change instead (no double-fire).
+                .uHaptic(.none)
                 .buttonStyle(.uPressable)
                 .accessibilityLabel(item.label)
                 .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)

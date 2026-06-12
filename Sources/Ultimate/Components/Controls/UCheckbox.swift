@@ -5,11 +5,13 @@ import SwiftUI
 public struct UCheckbox: View {
     @Binding var isChecked: Bool
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.uHaptic) private var hapticOverride
 
     public init(isChecked: Binding<Bool>) { self._isChecked = isChecked }
 
     public var body: some View {
         Button {
+            fireSemanticHaptic(.selection, override: hapticOverride)
             withAnimation(UMotion.spring()) { isChecked.toggle() }
         } label: {
             RoundedRectangle(cornerRadius: 9, style: .continuous)

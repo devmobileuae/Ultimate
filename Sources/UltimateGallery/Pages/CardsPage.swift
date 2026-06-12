@@ -23,6 +23,17 @@ struct CardsPage: View {
                             cardBody("Tinted card", "Pastel 100 fill, ink content.")
                         }
                     }
+                    Specimen(label: ".glass (over a colorful backdrop)") {
+                        UCard(fill: .glass) {
+                            cardBody("Glass card", "Material, tint, rim, highlight — no shadow.")
+                        }
+                        .padding(USpacing.s5)
+                        .background(
+                            LinearGradient(colors: [UColor.peri, UColor.lilac],
+                                           startPoint: .topLeading, endPoint: .bottomTrailing),
+                            in: .rect(cornerRadius: URadius.xxl)
+                        )
+                    }
                 }
             }
 

@@ -13,6 +13,9 @@ public enum UCardFill: Sendable {
     case card
     case tone(UTone)
     case tint(UTone)
+    /// Frosted glass — material + tint + rim + highlight, no shadow. Best over
+    /// colorful or photographic backdrops (see ``View/uGlass(radius:)``).
+    case glass
 }
 
 public struct UCard<Content: View>: View {
@@ -26,19 +29,12 @@ public struct UCard<Content: View>: View {
         self.content = content()
     }
 
-    private var background: Color {
-        switch fill {
-        case .card: UColor.surfaceCard
-        case .tone(let t): t.fill
-        case .tint(let t): t.tint
-        }
-    }
-
     private var foreground: Color {
         switch fill {
         case .card: UColor.textPrimary
         case .tone(let t): t.onFill
         case .tint: UColor.textOnAccent  // ink, constant across themes
+        case .glass: UColor.textPrimary
         }
     }
 
@@ -47,11 +43,23 @@ public struct UCard<Content: View>: View {
         return false
     }
 
+    private let shape = RoundedRectangle(cornerRadius: URadius.xl, style: .continuous)
+
+    @ViewBuilder private var cardBackground: some View {
+        switch fill {
+        case .card: shape.fill(UColor.surfaceCard)
+        case .tone(let t): shape.fill(t.fill)
+        case .tint(let t): shape.fill(t.tint)
+        case .glass: glassBackground(shape)
+        }
+    }
+
     public var body: some View {
         content
             .padding(USpacing.s5)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(RoundedRectangle(cornerRadius: URadius.xl, style: .continuous).fill(background))
+            .background { cardBackground }
+            .clipShape(shape)
             .foregroundStyle(foreground)
             .modifier(OptionalCardShadow(enabled: hasShadow))
     }

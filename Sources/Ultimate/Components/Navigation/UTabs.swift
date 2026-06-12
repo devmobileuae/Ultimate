@@ -6,6 +6,7 @@ import SwiftUI
 public struct UTabs: View {
     @Binding private var selection: Int
     private let titles: [String]
+    @Environment(\.uHaptic) private var hapticOverride
 
     public init(selection: Binding<Int>, titles: [String]) {
         self._selection = selection
@@ -19,8 +20,16 @@ public struct UTabs: View {
                     UChip(
                         title,
                         selected: index == selection,
-                        action: { selection = index }
+                        action: {
+                            if selection != index {
+                                fireSemanticHaptic(.selection, override: hapticOverride)
+                            }
+                            selection = index
+                        }
                     )
+                    // Suppress the chip's press haptic; UTabs fires `.selection`
+                    // on an actual tab change instead (no double-fire).
+                    .uHaptic(.none)
                 }
             }
         }

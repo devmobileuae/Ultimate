@@ -6,6 +6,7 @@ public struct URadio: View {
     let isSelected: Bool
     let action: () -> Void
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.uHaptic) private var hapticOverride
 
     public init(isSelected: Bool, action: @escaping () -> Void) {
         self.isSelected = isSelected
@@ -13,7 +14,11 @@ public struct URadio: View {
     }
 
     public var body: some View {
-        Button(action: action) {
+        Button {
+            // Selecting an already-selected radio is a no-op — stay silent.
+            if !isSelected { fireSemanticHaptic(.selection, override: hapticOverride) }
+            action()
+        } label: {
             Circle()
                 .strokeBorder(
                     isSelected ? UColor.controlActive : UColor.borderHairline,

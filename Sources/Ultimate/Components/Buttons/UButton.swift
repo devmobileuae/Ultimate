@@ -8,6 +8,7 @@ public enum UButtonVariant: CaseIterable, Sendable {
     case white     // card fill + whisper shadow (for colored/dark backdrops)
     case outline   // 1.5px strong border, transparent fill
     case ghost     // bare text
+    case glass     // frosted glass capsule (for colored/photographic backdrops)
 }
 
 public struct UButton: View {
@@ -47,14 +48,24 @@ public struct UButton: View {
         case .accent: UColor.accentPrimary
         case .soft: UColor.surfaceFill
         case .white: UColor.surfaceCard
-        case .outline, .ghost: .clear
+        case .outline, .ghost, .glass: .clear
         }
     }
     private var foreground: Color {
         switch variant {
         case .primary: UColor.textOnInverse
         case .accent: UColor.textOnCoral  // white-on-coral light; ink-on-lime dark
-        case .soft, .white, .outline, .ghost: UColor.textPrimary
+        case .soft, .white, .outline, .ghost, .glass: UColor.textPrimary
+        }
+    }
+
+    @ViewBuilder private var backgroundShape: some View {
+        if variant == .glass {
+            glassBackground(Capsule())
+        } else if variant == .white {
+            Capsule().fill(background).uShadow(.card)
+        } else {
+            Capsule().fill(background)
         }
     }
 
@@ -69,10 +80,10 @@ public struct UButton: View {
             .frame(height: size.height)
             .frame(maxWidth: block ? .infinity : nil)
             .background {
-                if variant == .white {
-                    Capsule().fill(background).uShadow(.card)
+                if variant == .glass {
+                    backgroundShape.clipShape(Capsule())
                 } else {
-                    Capsule().fill(background)
+                    backgroundShape
                 }
             }
             .overlay {
